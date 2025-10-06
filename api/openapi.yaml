@@ -1,0 +1,68 @@
+openapi: 3.0.3
+info:
+  title: VIVA CONECTA API
+  version: "1.0.0"
+servers:
+  - url: http://localhost:8080/api/v1
+paths:
+  /health:
+    get:
+      summary: Health check
+      responses:
+        '200':
+          description: ok
+  /search:
+    get:
+      summary: Search professionals & clinics
+      parameters:
+        - in: query
+          name: query
+          schema: { type: string }
+      responses: { '200': { description: results } }
+  /specialties:
+    get: { summary: List specialties, responses: { '200': { description: ok } } }
+  /subspecialties:
+    get: { summary: List subspecialties, responses: { '200': { description: ok } } }
+  /professionals/{id}:
+    get:
+      summary: Get professional by id
+      parameters: [{ in: path, name: id, required: true, schema: { type: string } }]
+      responses: { '200': { description: ok } }
+  /professionals/{id}/availability:
+    get:
+      summary: Get availability for professional
+      parameters: [{ in: path, name: id, required: true, schema: { type: string } }]
+      responses: { '200': { description: ok } }
+  /appointments:
+    post:
+      summary: Create appointment
+      requestBody: { required: true, content: { application/json: { schema: { type: object } } } }
+      responses: { '201': { description: created }, '200': { description: created } }
+  /appointments/{id}:
+    patch:
+      summary: Update appointment
+      parameters: [{ in: path, name: id, required: true, schema: { type: string } }]
+      requestBody: { required: true, content: { application/json: { schema: { type: object } } } }
+      responses: { '200': { description: updated } }
+  /appointments/{id}/checkin:
+    post:
+      summary: Check-in for appointment
+      parameters: [{ in: path, name: id, required: true, schema: { type: string } }]
+      responses: { '200': { description: ok } }
+  /reviews:
+    post:
+      summary: Create review (after attendance)
+      requestBody: { required: true, content: { application/json: { schema: { type: object } } } }
+      responses: { '201': { description: created }, '200': { description: created } }
+  /coupons:
+    get: { summary: List coupons (VIVA BELEZA), responses: { '200': { description: ok } } }
+  /chat/threads:
+    post: { summary: Create chat thread, responses: { '200': { description: ok } } }
+  /chat/messages:
+    post: { summary: Post chat message, responses: { '200': { description: ok } } }
+  /notifications:
+    get: { summary: List notifications, responses: { '200': { description: ok } } }
+  /notifications/test:
+    post: { summary: Send test notification, responses: { '200': { description: ok } } }
+  /webhooks/whatsapp:
+    post: { summary: WhatsApp webhook receiver, responses: { '200': { description: ok } } }

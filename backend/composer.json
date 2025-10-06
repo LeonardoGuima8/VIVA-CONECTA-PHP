@@ -1,0 +1,17 @@
+{
+  "name": "vivaconecta/web",
+  "description": "VIVA CONECTA - PHP MVC + Supabase platform",
+  "type": "project",
+  "require": {
+    "php": ">=8.1",
+    "ext-curl": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "src/"
+    }
+  },
+  "scripts": {
+    "start": "php -S localhost:8080 -t public"
+  }
+}
