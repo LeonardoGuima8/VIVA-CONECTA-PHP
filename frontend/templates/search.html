@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Busca · VIVA CONECTA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 text-slate-900 font-[Inter]">
+  <header class="sticky top-0 z-30 backdrop-blur bg-white/80 border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+      <a class="flex items-center gap-2 text-primary font-semibold text-lg" href="./index.html">
+        <span class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary">VC</span>
+        <span>VIVA CONECTA</span>
+      </a>
+      <nav class="hidden md:flex items-center gap-6 text-sm">
+        <a class="hover:text-primary transition" href="./index.html#verticais">Verticais</a>
+        <a class="hover:text-primary transition" href="./coupons.html">Cupons</a>
+        <a class="hover:text-primary transition" href="./dashboard-patient.html">Dashboards</a>
+      </nav>
+      <div class="flex items-center gap-3 text-sm">
+        <a class="hidden sm:inline-flex px-3 py-2 rounded-lg border border-slate-200 hover:border-primary transition" href="./login.html">Entrar</a>
+        <a class="inline-flex px-3 py-2 rounded-lg bg-primary text-white hover:bg-primary/90 transition" href="./register.html">Criar conta</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 py-12 space-y-12">
+    <section class="rounded-3xl bg-white shadow border border-slate-100 p-6">
+      <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+        <div>
+          <h1 class="text-2xl font-semibold">Busca inteligente</h1>
+          <p class="text-sm text-slate-500">Use filtros combinados para encontrar o profissional ideal em segundos. Resultados alimentados pela API `/api/v1/search`.</p>
+        </div>
+        <button id="btn-apply" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-white text-sm font-semibold hover:bg-primary/90 transition">Aplicar filtros</button>
+      </div>
+      <form class="mt-8 grid lg:grid-cols-5 gap-4" id="search-form">
+        <label class="col-span-2 text-sm text-slate-600">Palavra-chave
+          <input name="q" class="mt-1 w-full rounded-xl border border-slate-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/20" placeholder="Sintoma, especialidade, procedimento" />
+        </label>
+        <label class="text-sm text-slate-600">Vertical
+          <select name="vertical" class="mt-1 w-full rounded-xl border border-slate-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/20">
+            <option value="">Todas</option>
+            <option value="saude">VIVA SAÚDE</option>
+            <option value="beleza">VIVA BELEZA</option>
+            <option value="especialistas">VIVA ESPECIALISTAS</option>
+          </select>
+        </label>
+        <label class="text-sm text-slate-600">Cidade
+          <input name="city" class="mt-1 w-full rounded-xl border border-slate-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/20" placeholder="Distrito Federal" />
+        </label>
+        <label class="text-sm text-slate-600">Convênio / Plano
+          <input name="plan" class="mt-1 w-full rounded-xl border border-slate-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/20" placeholder="Unimed, SulAmérica..." />
+        </label>
+      </form>
+    </section>
+
+    <section class="grid lg:grid-cols-12 gap-8">
+      <aside class="lg:col-span-3 space-y-6">
+        <div class="rounded-3xl bg-white shadow border border-slate-100 p-5">
+          <h2 class="text-sm font-semibold text-slate-700 uppercase tracking-widest">Filtros avançados</h2>
+          <div class="mt-4 space-y-3 text-sm text-slate-600">
+            <label class="flex items-center gap-3">
+              <input type="checkbox" class="rounded border-slate-300 text-primary focus:ring-primary/40" checked />
+              Telemedicina
+            </label>
+            <label class="flex items-center gap-3">
+              <input type="checkbox" class="rounded border-slate-300 text-primary focus:ring-primary/40" />
+              Atendimento domiciliar
+            </label>
+            <label class="flex items-center gap-3">
+              <input type="checkbox" class="rounded border-slate-300 text-primary focus:ring-primary/40" />
+              Alta disponibilidade (&lt; 48h)
+            </label>
+          </div>
+        </div>
+        <div class="rounded-3xl bg-white shadow border border-slate-100 p-5">
+          <h2 class="text-sm font-semibold text-slate-700 uppercase tracking-widest">Ranking gamificado</h2>
+          <p class="mt-3 text-sm text-slate-600">Profissionais com badges especiais via `/api/v1/gamification/summary`.</p>
+        </div>
+      </aside>
+      <section class="lg:col-span-9 space-y-6" id="results">
+        <template id="result-template">
+          <article class="rounded-3xl bg-white shadow border border-slate-100 p-6 flex flex-col md:flex-row md:items-center gap-6">
+            <div class="shrink-0 flex flex-col items-center text-center">
+              <div class="h-20 w-20 rounded-2xl bg-slate-100 flex items-center justify-center text-xl font-semibold text-primary">MD</div>
+              <span class="mt-2 inline-flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">Rating <span class="rating">4.9</span></span>
+            </div>
+            <div class="flex-1 space-y-2">
+              <h3 class="text-lg font-semibold text-slate-900"><span class="name">Nome</span> · <span class="specialty text-primary font-medium">Especialidade</span></h3>
+              <p class="text-sm text-slate-600 leading-relaxed description">Resumo da atuação e diferenciais do profissional.</p>
+              <div class="flex flex-wrap gap-2 text-xs text-slate-500 tags"></div>
+              <div class="text-xs text-slate-400">Disponibilidade: <span class="availability">Próximas 24h</span></div>
+            </div>
+            <div class="w-full md:w-40 space-y-3">
+              <a class="block text-center px-4 py-2 rounded-lg bg-primary text-white text-sm font-semibold hover:bg-primary/90 transition" href="professional.html">Agendar consulta</a>
+              <button class="w-full px-4 py-2 rounded-lg border border-slate-200 text-sm font-semibold hover:border-primary transition">WhatsApp</button>
+            </div>
+          </article>
+        </template>
+      </section>
+    </section>
+  </main>
+
+  <footer class="bg-white border-t border-slate-200 mt-12">
+    <div class="max-w-7xl mx-auto px-4 py-8 text-sm text-slate-500 flex flex-col sm:flex-row sm:justify-between gap-3">
+      <p>© 2025 VIVA CONECTA</p>
+      <p><a class="text-primary hover:underline" href="mailto:contato@vivaconecta.com">contato@vivaconecta.com</a></p>
+    </div>
+  </footer>
+
+  <script>
+    async function loadResults() {
+      const container = document.getElementById('results');
+      const template = document.getElementById('result-template');
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const queryString = params.toString();
+        const response = await fetch(`/api/v1/search${queryString ? `?${queryString}` : ''}`);
+        const payload = await response.json();
+        container.innerHTML = '';
+        const results = payload.results || [];
+        if (!results.length) {
+          container.innerHTML = '<p class="text-sm text-slate-500">Nenhum profissional encontrado. Ajuste seus filtros.</p>';
+          return;
+        }
+        results.forEach((item) => {
+          const node = template.content.cloneNode(true);
+          node.querySelector('.name').textContent = item.name || 'Profissional';
+          node.querySelector('.specialty').textContent = (item.specialties?.[0]?.specialty_name) || 'Especialidade';
+          node.querySelector('.description').textContent = item.bio || 'Profissional credenciado na plataforma.';
+          node.querySelector('.rating').textContent = (item.rating_average || 4.8).toFixed(1);
+          node.querySelector('.availability').textContent = item.next_slot || 'Disponibilidade imediata';
+          const tags = node.querySelector('.tags');
+          (item.specialties || []).slice(0, 3).forEach((spec) => {
+            const badge = document.createElement('span');
+            badge.className = 'inline-flex items-center gap-1 px-3 py-1 bg-slate-100 rounded-full';
+            badge.textContent = spec.subspecialty_name || spec.specialty_name;
+            tags.appendChild(badge);
+          });
+          container.appendChild(node);
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    document.getElementById('btn-apply')?.addEventListener('click', (event) => {
+      event.preventDefault();
+      const form = document.getElementById('search-form');
+      const formData = new FormData(form);
+      const params = new URLSearchParams(formData);
+      window.location.search = params.toString();
+    });
+
+    loadResults();
+  </script>
+</body>
+</html>

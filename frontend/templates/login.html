@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login · VIVA CONECTA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-slate-900 text-slate-100 font-[Inter] flex items-center justify-center px-4">
+  <div class="w-full max-w-md">
+    <a class="flex items-center gap-2 text-primary font-semibold text-lg mb-10" href="./index.html">
+      <span class="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">VC</span>
+      <span>VIVA CONECTA</span>
+    </a>
+    <div class="rounded-3xl bg-slate-800 border border-slate-700 p-8 space-y-6">
+      <header class="space-y-2 text-center">
+        <h1 class="text-2xl font-semibold text-white">Acesse sua conta</h1>
+        <p class="text-sm text-slate-400">Autenticação Supabase (e-mail, telefone ou otp, conforme PRD).</p>
+      </header>
+      <form class="space-y-4" id="login-form">
+        <label class="block text-sm text-slate-300">E-mail
+          <input type="email" name="email" required class="mt-1 w-full rounded-xl border border-slate-600 bg-slate-900/70 px-4 py-3 text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary/40" placeholder="voce@exemplo.com" />
+        </label>
+        <label class="block text-sm text-slate-300">Senha
+          <input type="password" name="password" required class="mt-1 w-full rounded-xl border border-slate-600 bg-slate-900/70 px-4 py-3 text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary/40" placeholder="••••••••" />
+        </label>
+        <button id="btn-login" class="w-full rounded-xl bg-primary text-white py-3 font-semibold hover:bg-primary/90 transition">Entrar</button>
+      </form>
+      <button id="btn-otp" class="w-full rounded-xl border border-slate-600 text-slate-200 py-3 text-sm font-semibold hover:border-primary transition">Receber acesso via SMS / OTP</button>
+      <p class="text-xs text-center text-slate-500">Ainda não tem conta? <a class="text-primary hover:underline" href="./register.html">Cadastre-se</a></p>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('login-form')?.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const formData = new FormData(event.currentTarget);
+      const payload = Object.fromEntries(formData.entries());
+      try {
+        const response = await fetch('/api/v1/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const result = await response.json();
+        if (result.data?.access_token) {
+          window.location.href = './dashboard-patient.html';
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    });
+
+    document.getElementById('btn-otp')?.addEventListener('click', async () => {
+      const email = prompt('Informe seu e-mail ou telefone');
+      if (!email) return;
+      try {
+        await fetch('/api/v1/auth/otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email }),
+        });
+        alert('Código enviado. Confira sua caixa de entrada ou SMS.');
+      } catch (error) {
+        console.error(error);
+      }
+    });
+  </script>
+</body>
+</html>

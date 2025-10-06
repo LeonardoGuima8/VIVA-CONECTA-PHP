@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cadastro · VIVA CONECTA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-900 font-[Inter]">
+  <main class="max-w-4xl mx-auto px-4 py-12">
+    <a class="flex items-center gap-2 text-primary font-semibold text-lg mb-8" href="./index.html">
+      <span class="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">VC</span>
+      <span>VIVA CONECTA</span>
+    </a>
+    <div class="rounded-3xl bg-white border border-slate-200 shadow-sm p-8 space-y-8">
+      <header class="space-y-2">
+        <h1 class="text-3xl font-semibold">Crie sua conta</h1>
+        <p class="text-sm text-slate-500">Fluxos distintos para paciente, profissional e clínica, conforme PRD. Dados serão enviados à API `/api/v1/auth/register`.</p>
+      </header>
+      <form class="grid gap-6" id="register-form">
+        <div class="grid md:grid-cols-2 gap-4">
+          <label class="text-sm text-slate-600">Nome completo
+            <input name="name" required class="mt-1 w-full rounded-xl border border-slate-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/20" />
+          </label>
+          <label class="text-sm text-slate-600">E-mail
+            <input name="email" type="email" required class="mt-1 w-full rounded-xl border border-slate-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/20" />
+          </label>
+          <label class="text-sm text-slate-600">Telefone
+            <input name="phone" class="mt-1 w-full rounded-xl border border-slate-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/20" placeholder="(61) 9 9999-9999" />
+          </label>
+          <label class="text-sm text-slate-600">Senha
+            <input name="password" type="password" required class="mt-1 w-full rounded-xl border border-slate-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/20" />
+          </label>
+        </div>
+        <div class="grid md:grid-cols-3 gap-4">
+          <label class="text-sm text-slate-600">Perfil
+            <select name="role" required class="mt-1 w-full rounded-xl border border-slate-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/20">
+              <option value="patient">Paciente</option>
+              <option value="professional">Profissional</option>
+              <option value="clinic">Clínica</option>
+            </select>
+          </label>
+          <label class="text-sm text-slate-600">Registro profissional (opcional)
+            <input name="council_id" class="mt-1 w-full rounded-xl border border-slate-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/20" placeholder="CRM/CRP/CREFITO" />
+          </label>
+          <label class="text-sm text-slate-600">Experiência (anos)
+            <input name="years_experience" type="number" min="0" class="mt-1 w-full rounded-xl border border-slate-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/20" />
+          </label>
+        </div>
+        <div class="grid md:grid-cols-2 gap-4">
+          <label class="text-sm text-slate-600">Nome fantasia (clínicas)
+            <input name="trade_name" class="mt-1 w-full rounded-xl border border-slate-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/20" />
+          </label>
+          <label class="text-sm text-slate-600">CNPJ (clínicas)
+            <input name="cnpj" class="mt-1 w-full rounded-xl border border-slate-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/20" />
+          </label>
+        </div>
+        <div class="flex items-start gap-3 text-sm text-slate-600">
+          <input id="terms" type="checkbox" required class="mt-1 rounded border-slate-300 text-primary focus:ring-primary/40" />
+          <label for="terms">Concordo com os termos de uso e autorizo o tratamento dos dados conforme a LGPD.</label>
+        </div>
+        <button class="rounded-xl bg-primary text-white px-4 py-3 font-semibold hover:bg-primary/90 transition">Criar conta</button>
+      </form>
+      <p class="text-xs text-slate-500 text-center">Já possui acesso? <a class="text-primary hover:underline" href="./login.html">Entrar</a></p>
+    </div>
+  </main>
+
+  <script>
+    document.getElementById('register-form')?.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const formData = new FormData(event.currentTarget);
+      const payload = Object.fromEntries(formData.entries());
+      payload.years_experience = Number(payload.years_experience || 0);
+      try {
+        const response = await fetch('/api/v1/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const result = await response.json();
+        if (result.data?.user_id) {
+          window.location.href = './dashboard-patient.html';
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    });
+  </script>
+</body>
+</html>

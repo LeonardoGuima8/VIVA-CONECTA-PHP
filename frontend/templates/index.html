@@ -1,47 +1,277 @@
 <!doctype html>
-<html lang="pt-br">
+<html lang="pt-br" class="scroll-smooth">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>VIVA CONECTA â€” Marketplace de SaÃºde</title>
+  <title>VIVA CONECTA · Plataforma integrada de saúde, beleza e bem-estar</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#2563EB',
+            secondary: '#10B981',
+            accent: '#F59E0B',
+            beauty: {
+              primary: '#E11D48',
+              secondary: '#7C3AED',
+              accent: '#F97316',
+            },
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
 </head>
-<body class="bg-slate-50 text-slate-900">
-  <header class="max-w-6xl mx-auto p-4 flex items-center justify-between">
-    <h1 class="font-bold text-xl">VIVA CONECTA</h1>
-    <nav class="flex gap-6 text-sm">
-      <a href="#" class="hover:text-blue-600">SaÃºde</a>
-      <a href="#" class="hover:text-blue-600">Beleza</a>
-      <a href="#" class="hover:text-blue-600">Especialistas</a>
-      <a href="#" class="hover:text-blue-600">Entrar</a>
-    </nav>
-  </header>
-
-  <section class="max-w-6xl mx-auto p-4 mt-6 rounded-2xl bg-gradient-to-r from-indigo-50 to-emerald-50">
-    <div class="grid md:grid-cols-2 gap-8 items-center p-8">
-      <div>
-        <p class="text-sm font-medium text-blue-700">#1 Plataforma de conexÃ£o</p>
-        <h2 class="text-3xl md:text-4xl font-bold mt-2">Encontre e agende com profissionais confiÃ¡veis</h2>
-        <p class="mt-3 text-slate-600">Busca inteligente, agendamento via WhatsApp ou Chat, avaliaÃ§Ãµes validadas.</p>
-        <div class="mt-6 grid sm:grid-cols-3 gap-3">
-          <input id="q" placeholder="Busque por especialidade, sintoma, procedimento..." class="px-4 py-3 rounded-lg border w-full" />
-          <select class="px-4 py-3 rounded-lg border w-full">
-            <option>Distrito Federal</option>
-          </select>
-          <button class="px-4 py-3 rounded-lg bg-blue-600 text-white">Buscar</button>
-        </div>
-      </div>
-      <div class="rounded-xl border bg-white p-6 shadow-sm">
-        <h3 class="font-semibold mb-3">Destaques</h3>
-        <ul class="text-sm space-y-2">
-          <li>â€¢ Agendamento hÃ­brido (WhatsApp + Chat)</li>
-          <li>â€¢ AvaliaÃ§Ãµes validadas (check-in obrigatÃ³rio)</li>
-          <li>â€¢ Filtros por subespecialidades e convÃªnios</li>
-          <li>â€¢ Sem comissÃµes por consulta</li>
-        </ul>
+<body class="min-h-screen bg-slate-50 text-slate-900 font-sans">
+  <header class="sticky top-0 z-30 backdrop-blur bg-white/80 border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+      <a class="flex items-center gap-2 text-primary font-semibold text-lg" href="./index.html">
+        <span class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary">VC</span>
+        <span>VIVA CONECTA</span>
+      </a>
+      <nav class="hidden md:flex items-center gap-6 text-sm">
+        <a class="hover:text-primary transition" href="#verticais">Verticais</a>
+        <a class="hover:text-primary transition" href="#como-funciona">Como funciona</a>
+        <a class="hover:text-primary transition" href="#painel">Dashboards</a>
+        <a class="hover:text-primary transition" href="#contato">Contato</a>
+      </nav>
+      <div class="flex items-center gap-3 text-sm">
+        <a class="hidden sm:inline-flex px-3 py-2 rounded-lg border border-slate-200 hover:border-primary transition" href="./login.html">Entrar</a>
+        <a class="inline-flex px-3 py-2 rounded-lg bg-primary text-white hover:bg-primary/90 transition" href="./register.html">Criar conta</a>
       </div>
     </div>
-  </section>
-  <footer class="max-w-6xl mx-auto p-4 mt-10 text-xs text-slate-500">Â© 2025 VIVA CONECTA</footer>
+  </header>
+
+  <main>
+    <section class="relative overflow-hidden bg-gradient-to-br from-slate-100 via-white to-primary/5">
+      <div class="max-w-7xl mx-auto px-4 pt-16 pb-24 grid lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <p class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs uppercase font-semibold tracking-widest">Marketplace unificado de saúde, beleza e bem-estar</p>
+          <h1 class="mt-6 text-4xl md:text-5xl font-bold leading-tight">Conecte pacientes e profissionais com inteligência, transparência e agendamento híbrido.</h1>
+          <p class="mt-4 text-lg text-slate-600">Busca semântica, agendas sincronizadas, avaliações validadas e dashboards inteligentes em uma única plataforma integrada alimentada por Supabase.</p>
+          <div class="mt-8 grid md:grid-cols-4 gap-3 bg-white/70 p-4 rounded-2xl shadow-sm border border-slate-100">
+            <input class="col-span-2 md:col-span-2 px-4 py-3 rounded-xl border border-slate-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none" placeholder="Procure por especialidade, sintoma ou procedimento" id="hero-search" />
+            <select class="px-4 py-3 rounded-xl border border-slate-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none">
+              <option>Distrito Federal</option>
+              <option>São Paulo</option>
+              <option>Rio de Janeiro</option>
+            </select>
+            <button onclick="window.location.href='search.html'" class="px-4 py-3 rounded-xl bg-primary text-white font-semibold hover:bg-primary/90 transition">Buscar</button>
+          </div>
+          <dl class="mt-10 grid grid-cols-2 gap-6 text-sm">
+            <div class="rounded-xl bg-white p-4 shadow border border-slate-100">
+              <dt class="text-slate-500">Tempo médio de agendamento</dt>
+              <dd class="mt-1 text-2xl font-semibold text-primary">&lt; 90s</dd>
+            </div>
+            <div class="rounded-xl bg-white p-4 shadow border border-slate-100">
+              <dt class="text-slate-500">Conversão após busca</dt>
+              <dd class="mt-1 text-2xl font-semibold text-secondary">&gt; 25%</dd>
+            </div>
+          </dl>
+        </div>
+        <div>
+          <div class="rounded-3xl border border-slate-100 bg-white shadow-xl p-6 space-y-6">
+            <h2 class="text-lg font-semibold">Snapshot em tempo real</h2>
+            <div class="grid grid-cols-2 gap-4 text-sm">
+              <div class="rounded-2xl border border-primary/20 bg-primary/5 p-4">
+                <p class="text-primary font-semibold">Consultas confirmadas</p>
+                <p class="mt-2 text-3xl font-bold">1.284</p>
+                <p class="mt-2 text-xs text-primary/70">+18% vs. mês anterior</p>
+              </div>
+              <div class="rounded-2xl border border-secondary/20 bg-secondary/5 p-4">
+                <p class="text-secondary font-semibold">Satisfação (NPS)</p>
+                <p class="mt-2 text-3xl font-bold">74</p>
+                <p class="mt-2 text-xs text-secondary/70">Meta mínima: 70</p>
+              </div>
+            </div>
+            <div class="border border-slate-200 rounded-2xl p-4">
+              <p class="text-sm font-medium text-slate-500">Agendamentos por canal</p>
+              <div class="mt-3 flex items-center gap-3">
+                <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary text-sm font-semibold">63%</span>
+                <div>
+                  <p class="text-sm font-semibold">Chat interno</p>
+                  <p class="text-xs text-slate-500">Conversas acompanhadas pelo SLA configurável</p>
+                </div>
+              </div>
+              <div class="mt-3 flex items-center gap-3">
+                <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-secondary/10 text-secondary text-sm font-semibold">37%</span>
+                <div>
+                  <p class="text-sm font-semibold">WhatsApp</p>
+                  <p class="text-xs text-slate-500">Integração oficial com WhatsApp Business API</p>
+                </div>
+              </div>
+            </div>
+            <a href="dashboard-admin.html" class="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline">
+              Ver dashboards analíticos completos
+              <span aria-hidden="true">?</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="verticais" class="max-w-7xl mx-auto px-4 py-24">
+      <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+        <div>
+          <h2 class="text-3xl font-semibold">Três verticais, uma experiência conectada</h2>
+          <p class="mt-3 text-slate-600 max-w-2xl">Do cuidado primário à estética avançada, agrupamos profissionais e clínicas em módulos especializados. Cada vertical conta com filtros inteligentes, subespecialidades e ofertas personalizadas.</p>
+        </div>
+        <a href="search.html" class="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline">Explorar profissionais</a>
+      </div>
+      <div class="mt-12 grid md:grid-cols-3 gap-6">
+        <article class="rounded-3xl border border-primary/20 bg-white p-6 shadow-sm">
+          <header class="flex items-center gap-3">
+            <span class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary text-lg font-bold">S</span>
+            <div>
+              <h3 class="text-lg font-semibold">VIVA SAÚDE</h3>
+              <p class="text-xs uppercase tracking-widest text-primary font-semibold">Médicos e clínicas gerais</p>
+            </div>
+          </header>
+          <ul class="mt-6 space-y-3 text-sm text-slate-600">
+            <li>Busca por sintomas, convênios e disponibilidade imediata.</li>
+            <li>Telemedicina com prontuário compartilhado.</li>
+            <li>Check-in validado para gerar avaliações confiáveis.</li>
+          </ul>
+          <a href="search.html?vertical=saude" class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline">Ver especialidades</a>
+        </article>
+        <article class="rounded-3xl border border-beauty.primary/20 bg-white p-6 shadow-sm">
+          <header class="flex items-center gap-3">
+            <span class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-beauty.primary/10 text-beauty.primary text-lg font-bold">B</span>
+            <div>
+              <h3 class="text-lg font-semibold">VIVA BELEZA</h3>
+              <p class="text-xs uppercase tracking-widest text-beauty.primary font-semibold">Estética e bem-estar</p>
+            </div>
+          </header>
+          <ul class="mt-6 space-y-3 text-sm text-slate-600">
+            <li>Cupons e vouchers com QR Code para validação automática.</li>
+            <li>Portfólio visual de procedimentos e resultados.</li>
+            <li>Programas de fidelidade e gamificação integrados.</li>
+          </ul>
+          <a href="coupons.html" class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-beauty.primary hover:underline">Ativar ofertas</a>
+        </article>
+        <article class="rounded-3xl border border-secondary/20 bg-white p-6 shadow-sm">
+          <header class="flex items-center gap-3">
+            <span class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-secondary/10 text-secondary text-lg font-bold">E</span>
+            <div>
+              <h3 class="text-lg font-semibold">VIVA ESPECIALISTAS</h3>
+              <p class="text-xs uppercase tracking-widest text-secondary font-semibold">Psicólogos, fisios, terapeutas</p>
+            </div>
+          </header>
+          <ul class="mt-6 space-y-3 text-sm text-slate-600">
+            <li>Matching inteligente com base em necessidades e afinidades.</li>
+            <li>Agenda híbrida com controle de presença e no-show.</li>
+            <li>Relatórios de evolução compartilhados com pacientes.</li>
+          </ul>
+          <a href="search.html?vertical=especialistas" class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-secondary hover:underline">Conhecer profissionais</a>
+        </article>
+      </div>
+    </section>
+
+    <section id="como-funciona" class="bg-white border-y border-slate-200">
+      <div class="max-w-7xl mx-auto px-4 py-24">
+        <div class="max-w-2xl">
+          <h2 class="text-3xl font-semibold">Journey digital validada end-to-end</h2>
+          <p class="mt-3 text-slate-600">A plataforma executa um fluxo completo de cadastro, descoberta, seleção, agendamento, atendimento, avaliação e fidelização — com cada etapa monitorada por eventos e webhooks.</p>
+        </div>
+        <div class="mt-12 grid lg:grid-cols-4 gap-8">
+          <div class="relative pl-10">
+            <span class="absolute left-0 top-0 text-sm font-semibold text-primary">1</span>
+            <h3 class="text-lg font-semibold">Cadastro multicanal</h3>
+            <p class="mt-2 text-sm text-slate-600">Login por e-mail, telefone ou social, com fluxos distintos para pacientes, profissionais e clínicas.</p>
+          </div>
+          <div class="relative pl-10">
+            <span class="absolute left-0 top-0 text-sm font-semibold text-primary">2</span>
+            <h3 class="text-lg font-semibold">Busca inteligente</h3>
+            <p class="mt-2 text-sm text-slate-600">Algoritmo semântico com filtros de geolocalização, subespecialidades e convênios.</p>
+          </div>
+          <div class="relative pl-10">
+            <span class="absolute left-0 top-0 text-sm font-semibold text-primary">3</span>
+            <h3 class="text-lg font-semibold">Agendamento híbrido</h3>
+            <p class="mt-2 text-sm text-slate-600">Integração com WhatsApp Business + chat proprietário, com SLA configurável e lembretes automáticos.</p>
+          </div>
+          <div class="relative pl-10">
+            <span class="absolute left-0 top-0 text-sm font-semibold text-primary">4</span>
+            <h3 class="text-lg font-semibold">Pós-atendimento</h3>
+            <p class="mt-2 text-sm text-slate-600">Check-in validado, avaliações autenticadas, gamificação e dashboards financeiros.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="painel" class="max-w-7xl mx-auto px-4 py-24">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <h2 class="text-3xl font-semibold">Dashboards para cada público</h2>
+          <p class="mt-3 text-slate-600">KPIs dedicados para pacientes, profissionais e administradores, com dados provenientes das funções RPC do Supabase.</p>
+          <ul class="mt-6 space-y-3 text-sm text-slate-600">
+            <li><span class="font-semibold text-primary">Paciente:</span> histórico de consultas, próximos agendamentos e aproveitamento de cupons.</li>
+            <li><span class="font-semibold text-primary">Profissional:</span> indicadores de performance, SLA de chat, ranking de avaliações.</li>
+            <li><span class="font-semibold text-primary">Admin:</span> visão consolidada de receita, fluxo por vertical e uptime.</li>
+          </ul>
+          <div class="mt-8 flex flex-wrap gap-3 text-sm">
+            <a class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary/90 transition" href="dashboard-patient.html">Dashboard paciente</a>
+            <a class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-slate-200 hover:border-primary transition" href="dashboard-professional.html">Dashboard profissional</a>
+            <a class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-slate-200 hover:border-primary transition" href="dashboard-admin.html">Dashboard admin</a>
+          </div>
+        </div>
+        <div class="rounded-3xl border border-slate-200 bg-white shadow-sm p-6">
+          <img src="https://images.unsplash.com/photo-1587502536969-3006e8dc736b?auto=format&fit=crop&w=900&q=80" alt="Ilustração dashboards" class="rounded-2xl object-cover w-full h-72" />
+          <div class="mt-4 text-xs text-slate-500">Ilustração conceitual · dados gerados pela API RESTful (PHP + Supabase).</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-slate-900 text-white">
+      <div class="max-w-7xl mx-auto px-4 py-24 grid lg:grid-cols-3 gap-10">
+        <div class="lg:col-span-2">
+          <h2 class="text-3xl font-semibold">Integrações prontas para acelerar o go-to-market</h2>
+          <p class="mt-3 text-slate-300 max-w-2xl">WhatsApp Business API, Stripe/Mercado Pago, Supabase Auth e Storage, além de GitHub Actions para CI/CD. Tudo orquestrado por webhooks e edge functions.</p>
+          <dl class="mt-8 grid sm:grid-cols-2 gap-6 text-sm">
+            <div>
+              <dt class="text-slate-400">Edge Functions</dt>
+              <dd class="mt-1 text-white">Sincronização de agenda, disparo de notificações, reprocessamento de ranking e ingestão de webhooks.</dd>
+            </div>
+            <div>
+              <dt class="text-slate-400">Segurança</dt>
+              <dd class="mt-1 text-white">RLS configurado, JWT custom e segregação de roles por vertical.</dd>
+            </div>
+          </dl>
+        </div>
+        <div class="rounded-3xl border border-white/10 bg-white/5 p-6 space-y-4">
+          <h3 class="text-lg font-semibold">Pronto para testar</h3>
+          <p class="text-sm text-slate-200">Faça deploy local orientado pelo README, conecte ao Supabase e valide os fluxos com os endpoints REST.</p>
+          <a href="api/openapi.yaml" class="inline-flex items-center gap-2 text-sm font-semibold text-white hover:underline">Documentação OpenAPI</a>
+          <a href="https://app.supabase.com" target="_blank" class="inline-flex items-center gap-2 text-sm font-semibold text-white hover:underline">Console Supabase</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer id="contato" class="bg-white border-t border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 py-10 grid md:grid-cols-3 gap-8 text-sm">
+      <div>
+        <p class="text-lg font-semibold text-primary">VIVA CONECTA</p>
+        <p class="mt-2 text-slate-600">Transformando o acesso à saúde e bem-estar com tecnologia, dados e experiência do usuário.</p>
+      </div>
+      <div>
+        <p class="font-semibold text-slate-900">Links úteis</p>
+        <ul class="mt-3 space-y-2 text-slate-600">
+          <li><a class="hover:text-primary transition" href="search.html">Buscar profissionais</a></li>
+          <li><a class="hover:text-primary transition" href="coupons.html">Cupons & vouchers</a></li>
+          <li><a class="hover:text-primary transition" href="dashboard-admin.html">Dashboard admin</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="font-semibold text-slate-900">Contato</p>
+        <p class="mt-3 text-slate-600">Suporte e integração: <a class="text-primary hover:underline" href="mailto:contato@vivaconecta.com">contato@vivaconecta.com</a></p>
+        <p class="mt-2 text-slate-500 text-xs">© 2025 VIVA CONECTA · Todos os direitos reservados.</p>
+      </div>
+    </div>
+  </footer>
 </body>
 </html>

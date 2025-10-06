@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dashboard Admin · VIVA CONECTA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-slate-900 text-slate-100 font-[Inter]">
+  <header class="sticky top-0 z-20 bg-slate-900/90 backdrop-blur border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+      <a class="flex items-center gap-2 text-white font-semibold text-lg" href="./index.html">
+        <span class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-accent/20 text-accent">VC</span>
+        <span>Console Administrativo</span>
+      </a>
+      <nav class="flex items-center gap-5 text-sm text-slate-400">
+        <a class="hover:text-white transition" href="./dashboard-admin.html">Visão geral</a>
+        <a class="hover:text-white transition" href="#kpis">KPIs</a>
+        <a class="hover:text-white transition" href="#webhooks">Webhooks</a>
+      </nav>
+      <div class="text-xs text-slate-400">Uptime 99.7%</div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 py-12 space-y-12">
+    <section class="grid lg:grid-cols-4 gap-6" id="kpis">
+      <article class="rounded-3xl bg-gradient-to-br from-primary/40 to-primary/10 border border-primary/30 p-6">
+        <p class="text-xs uppercase tracking-widest text-slate-200">Usuários totais</p>
+        <p class="mt-3 text-3xl font-semibold text-white" id="users">0</p>
+        <p class="mt-2 text-sm text-slate-200">Pacientes + profissionais + clínicas.</p>
+      </article>
+      <article class="rounded-3xl bg-slate-800 border border-slate-700 p-6">
+        <p class="text-xs uppercase tracking-widest text-slate-400">Profissionais ativos</p>
+        <p class="mt-3 text-3xl font-semibold text-white" id="professionals">0</p>
+        <p class="mt-2 text-sm text-slate-400">Com agenda sincronizada nas últimas 48h.</p>
+      </article>
+      <article class="rounded-3xl bg-slate-800 border border-slate-700 p-6">
+        <p class="text-xs uppercase tracking-widest text-slate-400">Clínicas verificadas</p>
+        <p class="mt-3 text-3xl font-semibold text-white" id="clinics">0</p>
+        <p class="mt-2 text-sm text-slate-400">Fluxo de KYC aprovado.</p>
+      </article>
+      <article class="rounded-3xl bg-slate-800 border border-slate-700 p-6">
+        <p class="text-xs uppercase tracking-widest text-slate-400">Consultas (30 dias)</p>
+        <p class="mt-3 text-3xl font-semibold text-white" id="appointments">0</p>
+        <p class="mt-2 text-sm text-slate-400">Consolidadas via `/api/v1/dashboard/admin`.</p>
+      </article>
+    </section>
+
+    <section class="rounded-3xl bg-slate-800/80 border border-slate-700 p-6">
+      <header class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div>
+          <h2 class="text-lg font-semibold text-white">Distribuição por verticais</h2>
+          <p class="text-sm text-slate-400">Dados agregados a partir das views do Supabase.</p>
+        </div>
+        <button class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-accent text-slate-900 text-sm font-semibold hover:bg-accent/90 transition">Exportar CSV</button>
+      </header>
+      <div class="mt-6 grid md:grid-cols-3 gap-4 text-sm">
+        <div class="rounded-2xl border border-slate-700 bg-slate-900/50 p-4">
+          <p class="text-xs uppercase text-primary/70">VIVA SAÚDE</p>
+          <p class="mt-2 text-2xl font-semibold text-white" id="kpi-saude">0</p>
+        </div>
+        <div class="rounded-2xl border border-slate-700 bg-slate-900/50 p-4">
+          <p class="text-xs uppercase text-beauty-primary/70">VIVA BELEZA</p>
+          <p class="mt-2 text-2xl font-semibold text-white" id="kpi-beleza">0</p>
+        </div>
+        <div class="rounded-2xl border border-slate-700 bg-slate-900/50 p-4">
+          <p class="text-xs uppercase text-secondary/70">VIVA ESPECIALISTAS</p>
+          <p class="mt-2 text-2xl font-semibold text-white" id="kpi-especialistas">0</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="webhooks" class="rounded-3xl bg-slate-800/80 border border-slate-700 p-6">
+      <header class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div>
+          <h2 class="text-lg font-semibold text-white">Monitoramento de webhooks</h2>
+          <p class="text-sm text-slate-400">WhatsApp, notificações, ranking e sincronização de agenda.</p>
+        </div>
+        <button class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-slate-600 text-sm hover:border-accent transition">Configurar alertas</button>
+      </header>
+      <div id="webhook-table" class="mt-6 overflow-hidden rounded-2xl border border-slate-700">
+        <table class="min-w-full divide-y divide-slate-800 text-sm">
+          <thead class="bg-slate-800/70 text-xs uppercase tracking-widest text-slate-400">
+            <tr>
+              <th class="px-4 py-3 text-left">Webhook</th>
+              <th class="px-4 py-3 text-left">Última execução</th>
+              <th class="px-4 py-3 text-left">Status</th>
+              <th class="px-4 py-3 text-left">Duração</th>
+            </tr>
+          </thead>
+          <tbody id="webhook-body" class="divide-y divide-slate-800"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    async function loadAdminDashboard() {
+      try {
+        const response = await fetch('/api/v1/dashboard/admin');
+        const payload = await response.json();
+        const data = payload.data || {};
+        document.getElementById('users').textContent = data.users || 0;
+        document.getElementById('professionals').textContent = data.professionals || 0;
+        document.getElementById('clinics').textContent = data.clinics || 0;
+        document.getElementById('appointments').textContent = data.appointments_last_30d || 0;
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    function mockVerticals() {
+      document.getElementById('kpi-saude').textContent = '48%';
+      document.getElementById('kpi-beleza').textContent = '32%';
+      document.getElementById('kpi-especialistas').textContent = '20%';
+    }
+
+    function loadWebhookMonitor() {
+      const events = [
+        { name: 'whatsapp_webhook_handler', at: 'Hoje · 10h12', status: '200 OK', duration: '450ms' },
+        { name: 'notifications_dispatcher', at: 'Hoje · 09h55', status: '200 OK', duration: '190ms' },
+        { name: 'ranking_recalculate', at: 'Ontem · 22h15', status: '200 OK', duration: '820ms' },
+        { name: 'availability_sync', at: 'Ontem · 04h00', status: '200 OK', duration: '1.5s' },
+      ];
+      const tbody = document.getElementById('webhook-body');
+      tbody.innerHTML = '';
+      events.forEach((event) => {
+        const row = document.createElement('tr');
+        row.className = 'bg-slate-900/40 text-slate-200';
+        row.innerHTML = `<td class="px-4 py-3 font-semibold">${event.name}</td><td class="px-4 py-3 text-slate-400">${event.at}</td><td class="px-4 py-3"><span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary/20 text-secondary text-xs font-semibold">${event.status}</span></td><td class="px-4 py-3 text-slate-400">${event.duration}</td>`;
+        tbody.appendChild(row);
+      });
+    }
+
+    loadAdminDashboard();
+    mockVerticals();
+    loadWebhookMonitor();
+  </script>
+</body>
+</html>

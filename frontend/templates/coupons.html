@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cupons & vouchers · VIVA CONECTA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 text-slate-900 font-[Inter]">
+  <header class="sticky top-0 z-20 backdrop-blur bg-white/80 border-b border-slate-200">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      <a class="flex items-center gap-2 text-beauty-primary font-semibold text-lg" href="./index.html">
+        <span class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-beauty.primary/10 text-beauty.primary">VB</span>
+        <span>VIVA BELEZA</span>
+      </a>
+      <div class="flex items-center gap-3 text-sm">
+        <a class="hidden md:inline-flex px-3 py-2 rounded-lg border border-slate-200 hover:border-beauty.primary transition" href="./dashboard-patient.html">Área do paciente</a>
+        <a class="inline-flex px-3 py-2 rounded-lg bg-beauty.primary text-white hover:bg-beauty.primary/90 transition" href="./login.html">Entrar</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 py-12 space-y-10">
+    <section class="rounded-3xl bg-white border border-slate-100 shadow-sm p-6 md:p-10">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+        <div class="max-w-2xl space-y-3">
+          <h1 class="text-3xl font-semibold text-beauty.primary">Cupons e vouchers exclusivos</h1>
+          <p class="text-sm text-slate-600">Integração direta com `/api/v1/coupons` para listar ofertas ativas por clínica, com validação QR Code e política de uso baseada em Supabase Functions.</p>
+        </div>
+        <form id="coupon-form" class="flex gap-3">
+          <input name="code" class="rounded-xl border border-slate-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-beauty.primary/20" placeholder="Digite seu código" />
+          <button class="rounded-xl bg-beauty.primary text-white px-4 py-3 font-semibold hover:bg-beauty.primary/90 transition">Validar</button>
+        </form>
+      </div>
+    </section>
+
+    <section class="grid md:grid-cols-2 gap-6" id="coupon-grid"></section>
+  </main>
+
+  <footer class="bg-white border-t border-slate-200">
+    <div class="max-w-6xl mx-auto px-4 py-8 text-sm text-slate-500 flex flex-col sm:flex-row sm:justify-between gap-3">
+      <p>© 2025 VIVA CONECTA · VIVA BELEZA</p>
+      <p><a class="text-beauty.primary hover:underline" href="mailto:beleza@vivaconecta.com">beleza@vivaconecta.com</a></p>
+    </div>
+  </footer>
+
+  <script>
+    async function loadCoupons(filters = {}) {
+      const params = new URLSearchParams(filters);
+      const response = await fetch(`/api/v1/coupons${params.size ? `?${params}` : ''}`);
+      const payload = await response.json();
+      const container = document.getElementById('coupon-grid');
+      container.innerHTML = '';
+      (payload.data || []).forEach((coupon) => {
+        const card = document.createElement('article');
+        card.className = 'rounded-3xl border border-slate-100 bg-white shadow-sm p-6 flex flex-col gap-3';
+        card.innerHTML = `
+          <div class="flex items-center justify-between">
+            <span class="inline-flex items-center gap-2 rounded-full bg-beauty.primary/10 px-3 py-1 text-xs font-semibold text-beauty.primary">${coupon.category || 'Estética'}</span>
+            <span class="text-xs text-slate-400">${coupon.valid_to ? 'Válido até ' + coupon.valid_to.slice(0, 10) : 'Disponível'}</span>
+          </div>
+          <h2 class="text-lg font-semibold text-slate-900">${coupon.title || 'Desconto exclusivo'}</h2>
+          <p class="text-sm text-slate-600 flex-1">${coupon.description || ''}</p>
+          <div class="text-sm text-slate-500">Código: <span class="text-beauty.primary font-semibold">${coupon.code}</span></div>
+          <div class="text-xs text-slate-400">Clínica: ${coupon.clinic_name || 'Independente'}</div>
+          <button class="mt-2 rounded-xl bg-beauty.primary text-white px-4 py-2 text-sm font-semibold hover:bg-beauty.primary/90 transition">Aplicar</button>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    document.getElementById('coupon-form')?.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const formData = new FormData(event.currentTarget);
+      const code = (formData.get('code') || '').toString().trim();
+      if (!code) return;
+      const response = await fetch(`/api/v1/coupons/validate?code=${encodeURIComponent(code)}`);
+      const payload = await response.json();
+      if (payload.valid) {
+        alert(`Cupom ${payload.coupon.code} válido!`);
+      } else {
+        alert('Código inválido ou expirado.');
+      }
+    });
+
+    loadCoupons();
+  </script>
+</body>
+</html>

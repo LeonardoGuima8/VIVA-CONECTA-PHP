@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Chat interno · VIVA CONECTA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-slate-100 font-[Inter]">
+  <main class="max-w-4xl mx-auto px-4 py-12 space-y-8">
+    <header class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div>
+        <h1 class="text-3xl font-semibold text-white">Chat interno</h1>
+        <p class="text-sm text-slate-400">Conversas sincronizadas com `/api/v1/chat/threads` e `/api/v1/chat/messages`. SLA monitorado no dashboard profissional.</p>
+      </div>
+      <a class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-white text-sm font-semibold hover:bg-primary/90 transition" href="./dashboard-patient.html">Voltar ao painel</a>
+    </header>
+
+    <section class="rounded-3xl bg-slate-800/80 border border-slate-700 p-6 space-y-6">
+      <div class="flex flex-wrap gap-3">
+        <button class="thread-btn inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-primary text-white text-sm font-semibold" data-thread="demo">Consulta 15/02</button>
+        <button class="thread-btn inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-slate-600 text-sm hover:border-primary transition" data-thread="followup">Retorno 28/02</button>
+      </div>
+      <div id="message-list" class="space-y-3 max-h-80 overflow-y-auto pr-2"></div>
+      <form id="message-form" class="flex gap-3">
+        <input name="content" required class="flex-1 rounded-xl border border-slate-600 bg-slate-900/70 px-4 py-3 text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary/40" placeholder="Digite sua mensagem" />
+        <button class="rounded-xl bg-primary text-white px-4 py-3 font-semibold hover:bg-primary/90 transition">Enviar</button>
+      </form>
+    </section>
+  </main>
+
+  <script>
+    let currentThread = 'demo';
+
+    async function loadMessages() {
+      try {
+        const response = await fetch(`/api/v1/chat/threads/${currentThread}/messages`);
+        const payload = await response.json();
+        const messages = payload.data || [];
+        const container = document.getElementById('message-list');
+        container.innerHTML = '';
+        messages.forEach((message) => {
+          const bubble = document.createElement('div');
+          const isPatient = message.sender_role === 'patient';
+          bubble.className = `relative max-w-[80%] rounded-2xl px-4 py-3 text-sm ${isPatient ? 'bg-primary/20 text-primary self-end ml-auto' : 'bg-slate-900/60 text-slate-200'}`;
+          bubble.innerHTML = `<p>${message.content}</p><p class="mt-2 text-xs text-slate-400">${message.created_at || ''}</p>`;
+          container.appendChild(bubble);
+        });
+        container.scrollTop = container.scrollHeight;
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    document.querySelectorAll('.thread-btn').forEach((button) => {
+      button.addEventListener('click', () => {
+        currentThread = button.dataset.thread;
+        document.querySelectorAll('.thread-btn').forEach((node) => node.classList.remove('bg-primary', 'text-white'));
+        button.classList.add('bg-primary', 'text-white');
+        loadMessages();
+      });
+    });
+
+    document.getElementById('message-form')?.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const formData = new FormData(event.currentTarget);
+      const content = formData.get('content');
+      if (!content) return;
+      try {
+        await fetch('/api/v1/chat/messages', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ thread_id: currentThread, sender_id: 'current-user', content }),
+        });
+        event.currentTarget.reset();
+        loadMessages();
+      } catch (error) {
+        console.error(error);
+      }
+    });
+
+    loadMessages();
+  </script>
+</body>
+</html>
